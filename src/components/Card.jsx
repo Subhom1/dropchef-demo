@@ -1,13 +1,13 @@
-
+import Button from "./Button";
 
 const Card = (props) => {
-const { item, updateItem, setClick } = props;
+  const { item, updateItem, setClick } = props;
+
   return (
     <div
       className={`${
         item?.count && "border border-primary_green"
-      } border card m-10 w-72 h-96 rounded-xl bg-slate-200 cursor-pointer`}
-
+      } border card m-10 w-72 h-96 rounded-xl bg-slate-200`}
     >
       <div className="card-image">
         <img
@@ -35,23 +35,7 @@ const { item, updateItem, setClick } = props;
               add to order
             </button>
           ) : (
-            <div
-              className="button-wrapper ml-2 flex flex-row"
-              onClick={(e) => updateItem(item.data.id, "minus", e)}
-            >
-              <button className="button text-xs py-1 px-3 bg-primary_green rounded-lg uppercase">
-                -
-              </button>
-              <div className="selcted-count p-2 mx-1 border border-black rounded-lg">
-                {item.count}
-              </div>
-              <button
-                className="button text-xs py-1 px-3 bg-primary_green rounded-lg uppercase"
-                onClick={(e) => updateItem(item.data.id, "plus", e)}
-              >
-                +
-              </button>
-            </div>
+            <Button updateItem={updateItem} item={item} />
           )}
         </div>
       </div>
@@ -59,4 +43,4 @@ const { item, updateItem, setClick } = props;
   );
 };
 
-export default Card
+export default Card;

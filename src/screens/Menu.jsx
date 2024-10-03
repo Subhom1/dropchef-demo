@@ -8,12 +8,14 @@ import Header from "../components/Header";
 import { useNavigate, useLocation } from "react-router-dom";
 import Card from "../components/Card";
 import OrderDetails from "./OrderDetails";
+import Button from "../components/Button";
 
 token;
 const Menu = () => {
   const setMenu = useSetRecoilState(menuState);
   const [menus, setMenus] = useRecoilState(menuState);
   const [selectedCount, setSelectedCount] = useState(0);
+  const [selectedMenus, setSelctedMenus] = useState();
   const navigate = useNavigate();
   const location = useLocation();
   const { pathname } = location;
@@ -59,10 +61,16 @@ const Menu = () => {
       else return item;
     });
     setMenu(newMenu);
-    setSelectedCount(newMenu.filter((item) => item.selected).length);
   };
-    const getSelectedProd = menus?.filter((i) => i.selected);
-  console.log(getSelectedProd);
+  useEffect(() => {
+    if (menus?.length) {
+      const getSelectedProd = menus?.filter((i) => i.selected);
+    setSelectedCount(menus.filter((item) => item.selected).length);
+
+      setSelctedMenus(getSelectedProd);
+    }
+  }, [menus]);
+
   return (
     <div className="main-container mx-20 flex-1 static">
       <Header pathname={pathname} />
@@ -161,7 +169,28 @@ const Menu = () => {
           </button>
         </footer>
       )}
-      <OrderDetails />
+      {/* <OrderDetails /> */}
+      <div className="order-details-container">
+        <h3>Order Summary</h3>
+        {selectedMenus?.map((item, index) => {
+          if (item.selected) {
+            return (
+              <div key={item.data.id} className="main-wrapper">
+                <div className="order-img w-32 h-32" key={item.data.id}>
+                  <img
+                    src={item.data.imageURL}
+                    alt="menu_item"
+                    className="rounded-full"
+                  />
+                </div>
+                <div className="order-name">{item.data.name}</div>
+                <div className="order-price">{item.data.price * item.count}</div>
+                <Button item={item} updateItem={updateItem}/>
+              </div>
+            );
+          }
+        })}
+      </div>
     </div>
   );
 };
